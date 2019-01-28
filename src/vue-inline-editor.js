@@ -13,6 +13,7 @@ class EditableOptions{
     }
 }
 
+let lastStoppedEdgeEventBreak = null;
 
 Vue.component('vie', {
     props: ['model', 'fieldName', 'groupSelector', 'autoCommitOnBlur', 'autoHideOnBlur', 'endEditOnTabEdges'],
@@ -99,6 +100,15 @@ Vue.component('vie', {
         handle_input_keydown_27: function(ev){
             return this.endEdit();
         },
+        handle_input_keydown_13: function(ev){
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.cancelBubble=true;
+
+            this.commitEdit();
+            this.endEdit();
+
+        },
         handle_input_keydown_9: function(ev){
             ev.preventDefault();
             ev.stopPropagation();
@@ -111,8 +121,13 @@ Vue.component('vie', {
 
             const outOfEdges = (nextIndex < 0 || nextIndex > arr.length-1);
             
-            if(outOfEdges && this.options.autoCommitOnBlur) this.commitEdit();
+            if(this.options.autoCommitOnBlur) {
+                this.commitEdit();
+            }
             if(outOfEdges && this.options.endEditOnTabEdges) {
+                
+                if(lastStoppedEdgeEventBreak == this) return;
+                lastStoppedEdgeEventBreak = this;
                 return this.$emit('stoped-on-edge', {
                     vie: this,
                     index: currentIndex

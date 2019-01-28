@@ -5,22 +5,90 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
     <link rel="stylesheet" href="./vue-inline-editor.css">
+
 </head>
 <body>
+    <style> 
+        /* overrides material background  */
+        .vue-inline-editor-input {
+            background-color: white !important;
+            padding: 0px;
+            margin: 0px;
+            border: 1px;
+            border-style: dashed;
+            z-index: 99999;
+            display: none;
+        }
+    </style>
     <div id="app">
-        <div>
-            <div> group-1 with infinit navigation</div>
-            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
-            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
-            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
+        <div class="row">
+            <div class="col s6 m6">
+                <div class="card  blue lighten-4">
+                    <div class="card-content">
+                        <span class="card-title">Infinite navigation</span>
+                        <p>Click on dashed fields do edit inline and press {tab} or {shift + tab} to navigate into this group of data</p>
+                        <div class="row">
+                            <div class="col s12"></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_1"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_2"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_3"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div class="card green lighten-4">
+                    <div class="card-content">
+                        <span class="card-title">Navigation break</span>
+                        <p>Click on dashed fields do edit inline and press {tab} or {shift + tab} to navigate into this group of data</p>
+                        <div class="row">
+                            <div class="col s12"></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_1"' class='group-2' :group-selector='".group-2"'></vie></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_2"' class='group-2' :group-selector='".group-2"'></vie></div>
+                            <div class="col s12"><vie :model="model_x" :field-name='"field_3"' class='group-2' :group-selector='".group-2"'></vie></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div>
-            <div> group-2 with end navigation on edges</div>
-            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
-            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
-            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
+        <div class="row">
+            <div class="col s12 m12">
+                <div class="card brown lighten-4">
+                    <div class="card-content">
+                        <span class="card-title">Table navigation</span>
+                        <p>Click on dashed fields on table to edit inline and press {tab} or {shift + tab} to navigate into this group of data</p>
+                        <div class="row">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td>cell-1</td>
+                                        <td>cell-2</td>
+                                        <td>cell-3</td>
+                                        <td>cell-4</td>
+                                        <td>cell-5</td>
+                                        <td>cell-6</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="row in tableData">
+                                        <td><vie :model="row" :field-name='"cell1"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                        <td><vie :model="row" :field-name='"cell2"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                        <td><vie :model="row" :field-name='"cell3"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                        <td><vie :model="row" :field-name='"cell4"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                        <td><vie :model="row" :field-name='"cell5"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                        <td><vie :model="row" :field-name='"cell6"' class='table-row' :group-selector='".table-row"'></vie></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -37,7 +105,24 @@
             el: '#app',
             data: {
                 model_x: {
-                    name_x: 'teste'
+                    field_1: 'field 1',
+                    field_2: 'field 2',
+                    field_3: 'field 3'
+                },
+                tableData: []
+            },
+            mounted: function(){
+                for (let r = 0; r < 100; r++) {
+                    
+                    this.tableData.push({
+                        cell1: 'cell1-' + Math.random().toString(),
+                        cell2: 'cell2-' + Math.random().toString(),
+                        cell3: 'cell3-' + Math.random().toString(),
+                        cell4: 'cell4-' + Math.random().toString(),
+                        cell5: 'cell5-' + Math.random().toString(),
+                        cell6: 'cell6-' + Math.random().toString(),
+                    })
+                    
                 }
             }
         });

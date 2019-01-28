@@ -4,6 +4,7 @@
     border: 1px;
     border-style: dashed;
     z-index: 99999;
+    display: none;
 }
 
 .vue-inline-editor-static {
