@@ -90,12 +90,9 @@ Vue.component('vie', {
         $input_blur: function(){
             if(this.options.autoCommitOnBlur) this.commitEdit();
             if(this.options.autoHideOnBlur) this.unbindInput();
-            
-            console.log('$input_blur');
         },
         $input_keydown: function(ev){
             if(this['handle_input_keydown_' + ev.keyCode]) return this['handle_input_keydown_' + ev.keyCode](ev);        
-            console.log('$input_keydown');
         },
         $input_keyup: function(){
             console.log('$input_keyup');
