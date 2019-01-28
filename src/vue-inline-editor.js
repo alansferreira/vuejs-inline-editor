@@ -1,22 +1,26 @@
 const $input = $('<input type="text" class="vue-inline-editor-input"/>');
-$input.appendTo(document.body);
+$(function(){
+    $input.appendTo(document.body);
+});
+
 
 class EditableOptions{
-    constructor(autoCommitOnBlur, autoHideOnBlur){
+    constructor(autoCommitOnBlur, autoHideOnBlur, endEditOnTabEdges){
         
         this.autoCommitOnBlur = (autoCommitOnBlur==undefined? true: autoCommitOnBlur);
         this.autoHideOnBlur = (autoHideOnBlur==undefined? true: autoHideOnBlur);
-
+        // this.endEditOnTabEdges = (endEditOnTabEdges==undefined? true: endEditOnTabEdges);
+        this.endEditOnTabEdges = true;
     }
 }
 
 
 Vue.component('vie', {
-    props: ['model', 'fieldName', 'groupName', 'autoCommitOnBlur', 'autoHideOnBlur'],
+    props: ['model', 'fieldName', 'groupSelector', 'autoCommitOnBlur', 'autoHideOnBlur', 'endEditOnTabEdges'],
     template: "<span class='vue-inline-editor-static'>{{displayValue}}</span>",
     mounted: function () {
         const vm = this;
-        this.options = new EditableOptions(this.autoCommitOnBlur, this.autoHideOnBlur);
+        this.options = new EditableOptions(this.autoCommitOnBlur, this.autoHideOnBlur, this.infinitNavigation, this.endEditOnTabEdges);
         
         $(vm.$el)
             .on('click', vm.click)
@@ -38,11 +42,18 @@ Vue.component('vie', {
         startEdit: function(){
             this.bindInput();
         },
-        cancelEdit: function(){
+        endEdit: function(){
             this.unbindInput();
         },
         commitEdit: function(){
-            this.model[this.fieldName] = $input.val();
+            const oldValue = this.model[this.fieldName];
+            const newValue = $input.val();
+
+            if(oldValue==newValue) return;
+
+            this.model[this.fieldName] = newValue;
+
+            try { this.$emit('commit', this, oldValue, newValue); } catch (error) { }
         },
         
         bindInput: function(){            
@@ -83,44 +94,46 @@ Vue.component('vie', {
             console.log('$input_blur');
         },
         $input_keydown: function(ev){
-            switch(ev.keyCode){
-                case 27: //ESCAPE
-                  return this.cancelEdit();
-                case 9:
-
-                    ev.preventDefault();
-                    ev.stopPropagation();
-                    ev.cancelBubble=true;
-        
-                    // const $vie = $(ev.currentTarget).data('__vie__');
-                    const $el = $(this.$el);
-                    const arr = $('.vue-inline-editor-static', $el.parent()).toArray();
-                    var index = arr.indexOf(this.$el);
-                    if(!ev.shiftKey){
-                        if(index == arr.length-1) {
-                            index = 0;
-                        } else {
-                            index ++;
-                        }
-                    } else {
-                        if(index == 0) {
-                            index = arr.length - 1;
-                        } else {
-                            index --;
-                        }
-                    }
-
-                    this.commitEdit();
-                    this.unbindInput();
-                    // setTimeout(function (){
-                        $(arr[index]).data('__vie__').startEdit();
-                    // }, 20);
-              }
-        
+            if(this['handle_input_keydown_' + ev.keyCode]) return this['handle_input_keydown_' + ev.keyCode](ev);        
             console.log('$input_keydown');
         },
         $input_keyup: function(){
             console.log('$input_keyup');
         },
+        handle_input_keydown_27: function(ev){
+            return this.endEdit();
+        },
+        handle_input_keydown_9: function(ev){
+            ev.preventDefault();
+            ev.stopPropagation();
+            ev.cancelBubble=true;
+
+            const $el = $(this.$el);
+            const arr = this.getGroupSiblings();
+            const currentIndex = arr.indexOf(this.$el);
+            const nextIndex = currentIndex + (!ev.shiftKey ? 1: -1);
+
+            const outOfEdges = (nextIndex < 0 || nextIndex > arr.length-1);
+            
+            if(outOfEdges && this.options.autoCommitOnBlur) this.commitEdit();
+            if(outOfEdges && this.options.endEditOnTabEdges) {
+                return this.$emit('stoped-on-edge', {
+                    vie: this,
+                    index: currentIndex
+                });
+            }
+            if(outOfEdges) nextIndex = (nextIndex < 0 ? arr.length - 1 : 0);
+
+            const $nextEl = $(arr[nextIndex]);
+            this.endEdit();
+            $nextEl.data('__vie__').startEdit();
+        },
+        getGroupSiblings: function(){
+            return $(this.groupSelector).toArray();
+        },
+        getIndex: function(){
+            return getGroupSiblings().index(this.$el);
+        },
+
     }
 });

@@ -3,6 +3,7 @@
     margin: 0px;
     border: 1px;
     border-style: dashed;
+    z-index: 99999;
 }
 
 .vue-inline-editor-static {
