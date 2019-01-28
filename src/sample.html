@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" href="./vue-inline-editor.css">
+</head>
+<body>
+    <div id="app">
+        <div>
+            <div> parent-1</div>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+        </div>
+        <div>
+            <div> parent-2</div>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <vie :model="model_x" :field-name='"name_x"'></vie>
+        </div>
+    </div>
+    
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../node_modules/vue/dist/vue.js"></script>
+
+    
+    <script src="./vue-inline-editor.js"></script>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                model_x: {
+                    name_x: 'teste'
+                }
+            }
+        });
+    </script>
+</body>
+</html>

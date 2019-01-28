@@ -1,0 +1,12 @@
+.vue-inline-editor-input {
+    padding: 0px;
+    margin: 0px;
+    border: 1px;
+    border-style: dashed;
+}
+
+.vue-inline-editor-static {
+    padding-bottom: 1px;
+    border-bottom: dashed red 1px;
+    cursor: hand;    
+}
