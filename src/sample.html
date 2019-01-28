@@ -11,20 +11,18 @@
 <body>
     <div id="app">
         <div>
-            <div> parent-1</div>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <div> group-1 with infinit navigation</div>
+            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-1' :group-selector='".group-1"' :end-edit-on-tab-edges='false'></vie>
         </div>
         <div>
-            <div> parent-2</div>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
-            <vie :model="model_x" :field-name='"name_x"'></vie>
+            <div> group-2 with end navigation on edges</div>
+            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
+            <vie :model="model_x" :field-name='"name_x"' class='group-2' :group-selector='".group-2"'></vie>
         </div>
     </div>
     

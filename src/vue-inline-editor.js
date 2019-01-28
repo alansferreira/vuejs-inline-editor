@@ -9,8 +9,7 @@ class EditableOptions{
         
         this.autoCommitOnBlur = (autoCommitOnBlur==undefined? true: autoCommitOnBlur);
         this.autoHideOnBlur = (autoHideOnBlur==undefined? true: autoHideOnBlur);
-        // this.endEditOnTabEdges = (endEditOnTabEdges==undefined? true: endEditOnTabEdges);
-        this.endEditOnTabEdges = true;
+        this.endEditOnTabEdges = (endEditOnTabEdges==undefined? true: endEditOnTabEdges);
     }
 }
 
@@ -20,7 +19,7 @@ Vue.component('vie', {
     template: "<span class='vue-inline-editor-static'>{{displayValue}}</span>",
     mounted: function () {
         const vm = this;
-        this.options = new EditableOptions(this.autoCommitOnBlur, this.autoHideOnBlur, this.infinitNavigation, this.endEditOnTabEdges);
+        this.options = new EditableOptions(this.autoCommitOnBlur, this.autoHideOnBlur, this.endEditOnTabEdges);
         
         $(vm.$el)
             .on('click', vm.click)
@@ -108,7 +107,7 @@ Vue.component('vie', {
             const $el = $(this.$el);
             const arr = this.getGroupSiblings();
             const currentIndex = arr.indexOf(this.$el);
-            const nextIndex = currentIndex + (!ev.shiftKey ? 1: -1);
+            let nextIndex = currentIndex + (!ev.shiftKey ? 1: -1);
 
             const outOfEdges = (nextIndex < 0 || nextIndex > arr.length-1);
             
