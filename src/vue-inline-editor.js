@@ -16,7 +16,14 @@ class EditableOptions{
 let lastStoppedEdgeEventBreak = null;
 
 Vue.component('vie', {
-    props: ['model', 'fieldName', 'groupSelector', 'autoCommitOnBlur', 'autoHideOnBlur', 'endEditOnTabEdges'],
+    props: ['model', 
+            'fieldName', 
+            'groupSelector', 
+            'autoCommitOnBlur', 
+            'autoHideOnBlur', 
+            'endEditOnTabEdges',
+            ''
+    ],
     template: "<span class='vue-inline-editor-static'>{{displayValue}}</span>",
     mounted: function () {
         const vm = this;
@@ -113,11 +120,23 @@ Vue.component('vie', {
             ev.preventDefault();
             ev.stopPropagation();
             ev.cancelBubble=true;
+            
+            const nextIndex = this.getIndex() + (!ev.shiftKey ? 1: -1);
 
+            this.navigateTo(nextIndex);
+
+        },
+        getGroupSiblings: function(){
+            return $(this.groupSelector).toArray();
+        },
+        getIndex: function(){
+            return this.getGroupSiblings().indexOf(this.$el);
+        },
+        navigateTo(nextIndex){
             const $el = $(this.$el);
             const arr = this.getGroupSiblings();
             const currentIndex = arr.indexOf(this.$el);
-            let nextIndex = currentIndex + (!ev.shiftKey ? 1: -1);
+            // let nextIndex = currentIndex + (!ev.shiftKey ? 1: -1);
 
             const outOfEdges = (nextIndex < 0 || nextIndex > arr.length-1);
             
@@ -138,12 +157,6 @@ Vue.component('vie', {
             const $nextEl = $(arr[nextIndex]);
             this.endEdit();
             $nextEl.data('__vie__').startEdit();
-        },
-        getGroupSiblings: function(){
-            return $(this.groupSelector).toArray();
-        },
-        getIndex: function(){
-            return getGroupSiblings().index(this.$el);
         },
 
     }
