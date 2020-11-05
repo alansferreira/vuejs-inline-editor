@@ -145,8 +145,8 @@ Vue.component('vie', {
             }
             if(outOfEdges && this.options.endEditOnTabEdges) {
                 
-                if(lastStoppedEdgeEventBreak == this) return;
-                lastStoppedEdgeEventBreak = this;
+                // if(lastStoppedEdgeEventBreak == this) return;
+                // lastStoppedEdgeEventBreak = this;
                 return this.$emit('stoped-on-edge', {
                     vie: this,
                     index: currentIndex
